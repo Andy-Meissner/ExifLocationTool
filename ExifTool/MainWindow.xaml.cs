@@ -142,11 +142,11 @@ namespace ExifTool
                 MessageBox.Show("Speichern nicht möglich: Eingabestring zu lang");
                 return;
             }
-            /*
+            
             exifForCurrentImage.SetAutor(Photographer.Text);
             exifForCurrentImage.SetGPSCoordinates(coords);
             exifForCurrentImage.SetCountryName(Countryname.Text);
-            exifForCurrentImage.saveImage();*/
+            exifForCurrentImage.saveImage();
             
             LoadNextImage();
         }

@@ -56,7 +56,7 @@ namespace ExifTool
             try
             {
                 PropertyItem artistProperty = img.Image.GetPropertyItem(0x013b);
-                string name = Encoding.UTF8.GetString(artistProperty.Value);
+                string name = Encoding.Unicode.GetString(artistProperty.Value);
                 return name.Remove(name.Length - 1);
             }
             catch
@@ -82,6 +82,7 @@ namespace ExifTool
         
         public bool SetAutor(string autorName)
         {
+            // Type : 1 --> Only type that worked with unicode for the artist property
             try
             {
                 PropertyItem item = _thisIMG.Image.PropertyItems[0];
@@ -98,6 +99,7 @@ namespace ExifTool
 
         public bool SetCountryName(string countryName)
         {
+            // Type : 7 --> Only type that worked with unicode for the UserComment property
             try
             {
                 PropertyItem item = _thisIMG.Image.PropertyItems[0];
