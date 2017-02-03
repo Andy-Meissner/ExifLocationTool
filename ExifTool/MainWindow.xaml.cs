@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -131,11 +132,20 @@ namespace ExifTool
         private void save_image(object sender, RoutedEventArgs e)
         {
             double[] coords = getCoordsFromTextField();
-            if (coords == null) return;
+            if (coords == null)
+            {
+                MessageBox.Show("Speichern nicht möglich: Koordinaten nicht vorhanden oder im falschen Format");
+                return;
+            }
+            else if (Countryname.Text.Length > 40 || Photographer.Text.Length > 40)
+            {
+                MessageBox.Show("Speichern nicht möglich: Eingabestring zu lang");
+                return;
+            }
             
             exifForCurrentImage.SetAutor(Photographer.Text);
-            exifForCurrentImage.SetCountryName(Countryname.Text);
             exifForCurrentImage.SetGPSCoordinates(coords);
+            exifForCurrentImage.SetCountryName(Countryname.Text);
             exifForCurrentImage.saveImage();
             
             LoadNextImage();
@@ -148,15 +158,22 @@ namespace ExifTool
         private double[] getCoordsFromTextField()
         {
             double[] coords = new double[2];
-            string[] coordinates = Coordinates.Text.Split(',');
-            if (coordinates[0] == "") return null;
+            try
+            {
+                string[] coordinates = Coordinates.Text.Split(',');
+                if (coordinates[0] == "") return null;
 
 
-            NumberFormatInfo provider = new NumberFormatInfo();
-            provider.NumberDecimalSeparator = ".";
+                NumberFormatInfo provider = new NumberFormatInfo();
+                provider.NumberDecimalSeparator = ".";
 
-            coords[0] = Convert.ToDouble(coordinates[0], provider);
-            coords[1] = Convert.ToDouble(coordinates[1], provider);
+                coords[0] = Convert.ToDouble(coordinates[0], provider);
+                coords[1] = Convert.ToDouble(coordinates[1], provider);
+            }
+            catch
+            {
+                return null;
+            }
             return coords;
         }
 
@@ -214,7 +231,7 @@ namespace ExifTool
         /// <param name="e"></param>
         private void open_gmaps(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.google.de/maps/@" + Regex.Replace(Coordinates.Text, @"\s+", "") +  ",14z"); 
+            System.Diagnostics.Process.Start("https://www.google.de/maps/@" + Regex.Replace(Coordinates.Text, @"\s+", "") +  ",10z"); 
         }
     }
 }

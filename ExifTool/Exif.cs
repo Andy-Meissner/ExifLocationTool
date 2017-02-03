@@ -65,7 +65,6 @@ namespace ExifTool
             }
         }
         
-
         public void saveImage()
         {
             try
@@ -86,7 +85,7 @@ namespace ExifTool
             try
             {
                 PropertyItem item = _thisIMG.Image.PropertyItems[0];
-                var dataBytes = convertStringForExif(autorName);
+                var dataBytes = Encoding.ASCII.GetBytes(autorName + "\0");
                 item = getNewPropertyItem(item, 2, 0x013b, dataBytes);
                 _thisIMG.Image.SetPropertyItem(item);
             }
@@ -103,7 +102,14 @@ namespace ExifTool
             {
                 PropertyItem item = _thisIMG.Image.PropertyItems[0];
                 var dataBytes = convertStringForExif(countryName);
-                item = getNewPropertyItem(item, 2, 0x9286, dataBytes);
+
+                byte[] unicode = new byte[] { 0x55, 0x4E, 0x49, 0x43, 0x4F, 0x44, 0x45, 0x00 };
+                byte[] result = new byte[dataBytes.Length + unicode.Length];
+
+                unicode.CopyTo(result, 0);
+                dataBytes.CopyTo(result, 8);
+
+                item = getNewPropertyItem(item, 7, 0x9286, result);
                 _thisIMG.Image.SetPropertyItem(item);
             }
             catch
@@ -111,6 +117,12 @@ namespace ExifTool
                 return false;
             }
             return true;
+        }
+        private byte[] convertStringForExif(string value)
+        {
+            // String needs to be 0-terminated, so an extra char hast to be added
+            byte[] bValue = Encoding.Unicode.GetBytes(value);
+            return bValue;
         }
 
         public bool SetGPSCoordinates(double[] coordinates)
@@ -187,14 +199,7 @@ namespace ExifTool
 
             return result;
         }
-
-        private byte[] convertStringForExif(string value)
-        {
-            // String needs to be 0-terminated, so an extra char hast to be added
-            byte[] result = Encoding.UTF8.GetBytes(value + "x");
-            result[result.Length - 1] = 0;
-            return result;
-        }
+        
 
         private PropertyItem getNewPropertyItem(PropertyItem item, short type, int id, byte[] value)
         {
