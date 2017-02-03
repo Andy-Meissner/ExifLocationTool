@@ -26,7 +26,7 @@ namespace ExifTool
             InitializeComponent();
 
             // get default folder path from appconfig and load directory
-            string path = AppSettings.getAppSetting(pathProperty);
+            string path = AppSettings.GetAppSettings(pathProperty);
             label.Content = path;
             loadDirectory(path);
         }
@@ -38,14 +38,14 @@ namespace ExifTool
         {
             // opens a new folder dialog, starting at the last directory that got called
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = AppSettings.getAppSetting(pathProperty);
+            dialog.SelectedPath = AppSettings.GetAppSettings(pathProperty);
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 // load the directory and set the new path in appconfig
                 loadDirectory(dialog.SelectedPath);
-                AppSettings.setAppSetting(pathProperty, dialog.SelectedPath);
+                AppSettings.SetAppSettings(pathProperty, dialog.SelectedPath);
             } 
         }
 
@@ -68,7 +68,7 @@ namespace ExifTool
         {
             label.Content = path;
             Validator val = new Validator(path);
-            List<String> imagePaths = val.getAllValidIMGPathsFromArgs();
+            List<String> imagePaths = val.GetAllValidPaths();
             if (imagePaths.Count == 0) return;
 
             control = new Controller(imagePaths);
@@ -142,11 +142,11 @@ namespace ExifTool
                 MessageBox.Show("Speichern nicht möglich: Eingabestring zu lang");
                 return;
             }
-            
+            /*
             exifForCurrentImage.SetAutor(Photographer.Text);
             exifForCurrentImage.SetGPSCoordinates(coords);
             exifForCurrentImage.SetCountryName(Countryname.Text);
-            exifForCurrentImage.saveImage();
+            exifForCurrentImage.saveImage();*/
             
             LoadNextImage();
         }

@@ -35,7 +35,7 @@ namespace ExifTool
             var url = "http://nominatim.openstreetmap.org/reverse?format=xml&lat=" + lat+ "&lon=" + lon +  "&zoom=1&addressdetails=1";
             
             HttpRequest request = new HttpRequest(url);
-            return request.getXmlDoc();
+            return request.GetXmlDoc();
         }
     }
 }

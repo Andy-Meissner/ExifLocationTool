@@ -9,7 +9,7 @@ namespace ExifTool
 {
     class AppSettings
     {
-        public static string getAppSetting(string key)
+        public static string GetAppSettings(string key)
         {
             //Laden der AppSettings
             Configuration config = ConfigurationManager.OpenExeConfiguration(
@@ -18,7 +18,7 @@ namespace ExifTool
             return config.AppSettings.Settings[key].Value;
         }
 
-        public static void setAppSetting(string key, string value)
+        public static void SetAppSettings(string key, string value)
         {
             //Laden der AppSettings
             Configuration config = ConfigurationManager.OpenExeConfiguration(

@@ -13,7 +13,7 @@ namespace ExifTool
             _url = url;
         }
 
-        public XDocument getXmlDoc()
+        public XDocument GetXmlDoc()
         {
             string xmlString;
 

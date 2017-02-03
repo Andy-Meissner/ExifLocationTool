@@ -20,20 +20,20 @@ namespace ExifTool
             consoleArguments.Add(path);
         }
 
-        public List<String> getAllValidIMGPathsFromArgs()
+        public List<String> GetAllValidPaths()
         {
             List<String> imgPathList = new List<string>();
 
-            var argumentImgPaths = consoleArguments.FindAll(path => isImg(path));
-            var argumentDirPaths = consoleArguments.FindAll(path => isDir(path));
-            var imgPathsFromDir = getAllImgPathsFromDirectoryList(argumentDirPaths);
+            var argumentImgPaths = consoleArguments.FindAll(path => IsImage(path));
+            var argumentDirPaths = consoleArguments.FindAll(path => IsDirectory(path));
+            var imgPathsFromDir = GetAllImagesPaths(argumentDirPaths);
 
             imgPathList.AddRange(argumentImgPaths);
             imgPathList.AddRange(imgPathsFromDir);
             return imgPathList;
         }
 
-        private List<String> getImagesFromDir(String path)
+        private List<String> GetImagesFromDirectory(String path)
         {
             List<String> results = new List<string>();
             var thisdir = Directory.GetFiles(path,"*.jpg", SearchOption.TopDirectoryOnly);
@@ -42,26 +42,26 @@ namespace ExifTool
             return results;
         }
 
-        private List<String> getAllImgPathsFromDirectoryList(List<String> dirPaths)
+        private List<String> GetAllImagesPaths(List<String> dirPaths)
         {
             List<String> results = new List<String>();
 
             foreach (String directory in dirPaths)
             {
-                var imgsInDir = getImagesFromDir(directory);
+                var imgsInDir = GetImagesFromDirectory(directory);
                 results.AddRange(imgsInDir);
             }
             return results;
         }
 
-        private bool isImg(String path)
+        private bool IsImage(String path)
         {
             bool fileExists = File.Exists(path);
             bool isJPG = path.ToUpperInvariant().EndsWith(".JPG");
             return fileExists && isJPG;
         }
 
-        private bool isDir(String path)
+        private bool IsDirectory(String path)
         {
             return Directory.Exists(path);
         }

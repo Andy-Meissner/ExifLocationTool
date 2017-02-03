@@ -85,8 +85,8 @@ namespace ExifTool
             try
             {
                 PropertyItem item = _thisIMG.Image.PropertyItems[0];
-                var dataBytes = Encoding.ASCII.GetBytes(autorName + "\0");
-                item = getNewPropertyItem(item, 2, 0x013b, dataBytes);
+                var dataBytes = Encoding.Unicode.GetBytes(autorName + "\0");
+                item = getNewPropertyItem(item, 1, 0x013b, dataBytes);
                 _thisIMG.Image.SetPropertyItem(item);
             }
             catch
