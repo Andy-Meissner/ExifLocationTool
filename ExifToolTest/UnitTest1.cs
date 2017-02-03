@@ -10,7 +10,7 @@ namespace ExifToolTest
     {
         [TestMethod]
         public void TestMethod1()
-        {
+        {/*
             CustomImage ci = new CustomImage(@"C:\Users\andy\Desktop\pics\7.jpg");
             Exif exif = new Exif(ci);
 
@@ -20,7 +20,7 @@ namespace ExifToolTest
                 exif.saveImage();
             }
 
-            ci.Image.Dispose();
+            ci.Image.Dispose();*/
         }
     }
 }

@@ -9,7 +9,6 @@
 *.userosscache
 *.sln.docstates
 
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -274,6 +273,3 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/**
 # !tools/packages.config
-App.config
-Properties/AssemblyInfo.cs
-ExifCountryTool.csproj
