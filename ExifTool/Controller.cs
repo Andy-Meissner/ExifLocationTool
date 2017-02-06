@@ -8,7 +8,8 @@ namespace ExifTool
     class Controller
     {
         private List<string> _imagePaths;
-        private IEnumerator<string> _enumerator;
+        private int position = -1;
+
         public Controller(List<string> imagePaths)
         {
             _imagePaths = new List<string>();
@@ -16,18 +17,34 @@ namespace ExifTool
             NumericComparer ns = new NumericComparer();
             Array.Sort(filenames, ns);
             _imagePaths.AddRange(filenames);
-            _enumerator = _imagePaths.GetEnumerator();
         }
 
         public CustomImage NextPicture()
         {
-            if (_enumerator.MoveNext())
+            try
             {
-                var path = _enumerator.Current;
-                return new CustomImage(path);
+                position++;
+                string nextElement = _imagePaths[position];
+                return new CustomImage(nextElement);
             }
-            else
+            catch
             {
+                position = -1;
+                return null;
+            }
+        }
+
+        public CustomImage PrevPicture()
+        {
+            try
+            {
+                position--;
+                string prevElement = _imagePaths[position];
+                return new CustomImage(prevElement);
+            }
+            catch
+            {
+                position = 0;
                 return null;
             }
         }

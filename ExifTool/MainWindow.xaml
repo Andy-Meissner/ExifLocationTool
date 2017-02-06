@@ -6,27 +6,29 @@
         xmlns:local="clr-namespace:ExifTool"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="ExifTool" Height="803.85" Width="700">
-    <Grid Margin="10,10,10,10">
+        Title="ExifTool" Height="818.85" Width="700">
+    <Grid Margin="10,10,10,17">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="80"/>
-            <RowDefinition Height="Auto" MinHeight="470"/>
-            <RowDefinition Height="Auto" MinHeight="100"/>
-            <RowDefinition Height="Auto" MinHeight="50"/>
+            <RowDefinition Height="Auto" MinHeight="76"/>
+            <RowDefinition Height="Auto" MinHeight="450"/>
+            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" MinHeight="148"/>
+            <RowDefinition Height="Auto" MinHeight="147"/>
         </Grid.RowDefinitions>
-        <Label x:Name="label" Height="30" Grid.Row="0" Content="" Margin="10,10,10,40"/>
-        <Button x:Name="button" Height="30" Grid.Row="0" Content="Verzeichnis öffnen" Click="open_folder" Margin="10,40,10,10"/>
-        <StackPanel Name="sp" Height="450" Margin="10,0,10,0" Grid.Row="1" Width="652"/>
-        <TextBox x:Name="Coordinates" Height="30" Grid.Row="2" TextWrapping="Wrap" Text="" Margin="222,43,10,83"  LostKeyboardFocus="coordinatesfield_lostfocus"/>
-        <TextBox x:Name="Countryname" Height="30" Grid.Row="2" TextWrapping="Wrap" Text="" Margin="222,78,10,48"/>
-        <TextBox x:Name="Photographer" HorizontalAlignment="Left" Height="30" Margin="222,113,0,13" Grid.Row="2" TextWrapping="Wrap" Text="" Width="440"/>
-        <Label x:Name="label1" Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Margin="10,1,0,0" Grid.Row="2" VerticalAlignment="Top" Width="268"/>
-        <Label x:Name="label2" Content="Koordinaten" HorizontalAlignment="Left" Margin="10,43,0,0" Grid.Row="2" VerticalAlignment="Top" Width="185"/>
-        <Label x:Name="label2_Copy" Content="Land" HorizontalAlignment="Left" Margin="10,78,0,0" Grid.Row="2" VerticalAlignment="Top" Width="185"/>
-        <Label x:Name="label2_Copy1" Content="Fotograf" HorizontalAlignment="Left" Margin="10,113,0,0" Grid.Row="2" VerticalAlignment="Top" Width="185"/>
-        <Button x:Name="button1" Height="30" Grid.Row="3" Content="Daten speichern" Click="save_image" Margin="357,8,165,117" />
-        <Button x:Name="button2" Height="30" Grid.Row="3" Content="Koordinaten in Google Maps öffnen" Click="open_gmaps" Margin="10,8,448,117" />
-        <Label x:Name="label3" Content="" HorizontalAlignment="Left" Margin="188,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="474"/>
-        <Button x:Name="button3" Content="Überspringen" HorizontalAlignment="Left" Margin="512,8,0,0" Grid.Row="3" VerticalAlignment="Top" Width="150" Height="30" Click="btn_skipImage"/>
+        <Label x:Name="label" Grid.Row="0" Content="" Margin="10,10,10,40"/>
+        <Button x:Name="button" Grid.Row="0" Content="Verzeichnis öffnen" Click="open_folder" Margin="10,36,10,14" Height="27"/>
+        <StackPanel Name="sp" Margin="10,68,10,2" Grid.RowSpan="2"/>
+        <Button x:Name="button4" Height="27" Click="btn_prevImage" Content="Letztes Bild" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="150" Margin="10,9,0,0"/>
+        <Button x:Name="button5" Height="27" Click="btn_skipImage" Content="Nächstes Bild" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="150" Margin="514,10,0,0"/>
+        <TextBox x:Name="Coordinates" Grid.Row="3" TextWrapping="Wrap" Text="" Margin="222,42,10,80"  LostKeyboardFocus="coordinatesfield_lostfocus"/>
+        <TextBox x:Name="Countryname" Grid.Row="3" TextWrapping="Wrap" Text="" Margin="222,73,10,49"/>
+        <TextBox x:Name="Photographer" HorizontalAlignment="Left" Margin="222,104,0,18" Grid.Row="3" TextWrapping="Wrap" Text="" Width="442"/>
+        <Label x:Name="label1" Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Width="268" Height="37" Margin="10,1,0,0"/>
+        <Label x:Name="label2" Content="Koordinaten" HorizontalAlignment="Left" Margin="10,42,0,0" Grid.Row="3" VerticalAlignment="Top" Width="185" Height="26"/>
+        <Label x:Name="label2_Copy" Content="Land" HorizontalAlignment="Left" Margin="10,73,0,0" Grid.Row="3" VerticalAlignment="Top" Width="185" Height="26"/>
+        <Label x:Name="label2_Copy1" Content="Fotograf" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="3" VerticalAlignment="Top" Width="185" Height="26"/>
+        <Label x:Name="label3" Content="" HorizontalAlignment="Left" Margin="222,12,0,0" Grid.Row="3" VerticalAlignment="Top" Width="442" Height="26"/>
+        <Button x:Name="button1" Grid.Row="4" Content="Daten speichern" Click="save_image" Margin="222,11,10,108" />
+        <Button x:Name="button2" Grid.Row="4" Content="Koordinaten in Google Maps öffnen" Click="open_gmaps" Margin="10,11,457,108"/>
     </Grid>
 </Window>

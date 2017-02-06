@@ -20,6 +20,7 @@ namespace ExifTool
         private Exif exifForCurrentImage;
         private string pathProperty = "DirectoryPath";
         private Image uiImage;
+        private bool directoryOpen = false;
 
         public MainWindow()
         {
@@ -72,8 +73,8 @@ namespace ExifTool
             if (imagePaths.Count == 0) return;
 
             control = new Controller(imagePaths);
-            
-            LoadNextImage();
+            directoryOpen = true;
+            LoadNextImage(true);
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace ExifTool
             exifForCurrentImage.SetCountryName(Countryname.Text);
             exifForCurrentImage.saveImage();
             
-            LoadNextImage();
+            LoadNextImage(true);
         }
 
         /// <summary>
@@ -180,9 +181,9 @@ namespace ExifTool
         /// <summary>
         /// this functions loads the next image and metadata that is available
         /// </summary>
-        private void LoadNextImage()
+        private void LoadNextImage(bool next)
         {
-            var img = control.NextPicture();
+            var img = next ? control.NextPicture() : control.PrevPicture();
             if (img != null)
             {
                 exifForCurrentImage = new Exif(img);
@@ -200,10 +201,18 @@ namespace ExifTool
             }
             else
             {
-                clearUI();
-                uiImage = null;
-                exifForCurrentImage = null;
-                MessageBox.Show("Keine weiteren Bilder in diesem Verzeichnis");
+                directoryOpen = false;
+                if (next)
+                {
+                    clearUI();
+                    uiImage = null;
+                    exifForCurrentImage = null;
+                    MessageBox.Show("Keine weiteren Bilder in diesem Verzeichnis");
+                }
+                else
+                {
+                    MessageBox.Show("Erstes Bild im Verzeichnis");
+                }
             }
         }
 
@@ -221,7 +230,18 @@ namespace ExifTool
 
         private void btn_skipImage(object sender, RoutedEventArgs e)
         {
-            LoadNextImage();
+            if (directoryOpen)
+            {
+                LoadNextImage(true);
+            }
+        }
+
+        private void btn_prevImage(object sender, RoutedEventArgs e)
+        {
+            if(directoryOpen)
+            {
+                LoadNextImage(false);
+            }
         }
 
         /// <summary>

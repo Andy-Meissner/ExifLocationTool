@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using XperiCode.JpegMetadata;
 using ExifTool;
 
 namespace ExifToolTest
