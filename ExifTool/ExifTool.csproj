@@ -87,6 +87,8 @@
     <StartupObject>ExifTool.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NumericComparer">
       <HintPath>C:\Users\andy\Downloads\csnsort_src\csnsort_src\NumericComparer.dll</HintPath>
     </Reference>
@@ -96,6 +98,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -120,6 +123,9 @@
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="DirectoryControl.cs" />
+    <Compile Include="ExifToolViewModel.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="TypeConverter.cs" />
     <Compile Include="CountryNames.cs" />
     <Compile Include="Exif.cs" />

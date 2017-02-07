@@ -26,13 +26,23 @@ namespace ExifTool
         public MainWindow()
         {
             InitializeComponent();
-
+            /*
             // get default folder path from appconfig and load directory
             string path = AppSettings.GetAppSettings(_pathProperty);
             label.Content = path;
-            LoadDirectory(path);
+            LoadDirectory(path);*/
+        }       
+        
+        /// <summary>  
+                 /// this function gets called when the textbox with GPS-coordinates loses keyboard focus
+                 /// the function tries to get the countryname for the GPS-location and saves it to the countrynametextbox
+                 /// </summary>  
+        private void coordinatesfield_lostfocus(object sender, RoutedEventArgs e)
+        {/*
+            double[] coordinates = GetCoordsFromTextField();
+            if (coordinates != null) Countryname.Text = CountryNames.getCountryName(coordinates);*/
         }
-
+        /*
         /// <summary>  
         ///  this function gets called when the open folder button is clicked
         /// </summary>  
@@ -53,15 +63,7 @@ namespace ExifTool
             } 
         }
 
-        /// <summary>  
-        /// this function gets called when the textbox with GPS-coordinates loses keyboard focus
-        /// the function tries to get the countryname for the GPS-location and saves it to the countrynametextbox
-        /// </summary>  
-        private void coordinatesfield_lostfocus(object sender, RoutedEventArgs e)
-        {
-            double[] coordinates = GetCoordsFromTextField();
-            if (coordinates != null) Countryname.Text = CountryNames.getCountryName(coordinates);
-        }
+
 
 
         /// <summary>
@@ -272,6 +274,6 @@ namespace ExifTool
                 _destinationPath = dialog.SelectedPath;
                 Destinationpath.Content = dialog.SelectedPath;
             }
-        }
+        }*/
     }
 }
