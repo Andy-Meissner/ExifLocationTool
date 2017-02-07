@@ -16,20 +16,21 @@ namespace ExifTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        Controller control;
-        private Exif exifForCurrentImage;
-        private string pathProperty = "DirectoryPath";
-        private Image uiImage;
-        private bool directoryOpen = false;
+        Controller _control;
+        private Exif _exifForCurrentImage;
+        private readonly string _pathProperty = "DirectoryPath";
+        private string _destinationPath;
+        private Image _uiImage;
+        private bool _directoryOpen = false;
 
         public MainWindow()
         {
             InitializeComponent();
 
             // get default folder path from appconfig and load directory
-            string path = AppSettings.GetAppSettings(pathProperty);
+            string path = AppSettings.GetAppSettings(_pathProperty);
             label.Content = path;
-            loadDirectory(path);
+            LoadDirectory(path);
         }
 
         /// <summary>  
@@ -38,15 +39,17 @@ namespace ExifTool
         private void open_folder(object sender, RoutedEventArgs e)
         {
             // opens a new folder dialog, starting at the last directory that got called
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = AppSettings.GetAppSettings(pathProperty);
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                SelectedPath = AppSettings.GetAppSettings(_pathProperty)
+            };
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 // load the directory and set the new path in appconfig
-                loadDirectory(dialog.SelectedPath);
-                AppSettings.SetAppSettings(pathProperty, dialog.SelectedPath);
+                LoadDirectory(dialog.SelectedPath);
+                AppSettings.SetAppSettings(_pathProperty, dialog.SelectedPath);
             } 
         }
 
@@ -56,7 +59,7 @@ namespace ExifTool
         /// </summary>  
         private void coordinatesfield_lostfocus(object sender, RoutedEventArgs e)
         {
-            double[] coordinates = getCoordsFromTextField();
+            double[] coordinates = GetCoordsFromTextField();
             if (coordinates != null) Countryname.Text = CountryNames.getCountryName(coordinates);
         }
 
@@ -65,15 +68,18 @@ namespace ExifTool
         /// this function loads all image-paths in the given directory and initialises UI with the first image
         /// </summary>
         /// <param name="path">directory path, where the images are stored</param>
-        private void loadDirectory(string path)
+        private void LoadDirectory(string path)
         {
             label.Content = path;
+            Destinationpath.Content = path;
+            _destinationPath = path;
+
             Validator val = new Validator(path);
             List<String> imagePaths = val.GetAllValidPaths();
             if (imagePaths.Count == 0) return;
 
-            control = new Controller(imagePaths);
-            directoryOpen = true;
+            _control = new Controller(imagePaths);
+            _directoryOpen = true;
             LoadNextImage(true);
         }
 
@@ -81,7 +87,7 @@ namespace ExifTool
         /// loads image on the UI
         /// </summary>
         /// <param name="img"></param>
-        private void showImage(CustomImage img)
+        private void ShowImage(CustomImage img)
         {
             Image i = new Image();
             BitmapImage src = new BitmapImage();
@@ -94,7 +100,7 @@ namespace ExifTool
             i.Stretch = Stretch.UniformToFill;
 
             sp.Children.Add(i);
-            uiImage = i;
+            _uiImage = i;
         }
 
         /// <summary>
@@ -103,7 +109,7 @@ namespace ExifTool
         /// <param name="coordinates"></param>
         /// <param name="countryName"></param>
         /// <param name="photographer"></param>
-        private void updateUIForCurrentIMG(double[] coordinates, string countryName, string photographer)
+        private void UpdateUiForCurrentImg(double[] coordinates, string countryName, string photographer)
         {
             CultureInfo cult = new CultureInfo("en-US");
             if (coordinates != null)
@@ -116,12 +122,12 @@ namespace ExifTool
             }
             Countryname.Text = countryName;
             Photographer.Text = photographer;
-            if (uiImage != null)
+            if (_uiImage != null)
             {
-                sp.Children.Remove(uiImage);
+                sp.Children.Remove(_uiImage);
             }
-            showImage(exifForCurrentImage.Image);
-            label3.Content = exifForCurrentImage.Image.Path;
+            ShowImage(_exifForCurrentImage.Image);
+            label3.Content = _exifForCurrentImage.Image.Path;
         }
 
         /// <summary>
@@ -132,7 +138,7 @@ namespace ExifTool
         /// <param name="e"></param>
         private void save_image(object sender, RoutedEventArgs e)
         {
-            double[] coords = getCoordsFromTextField();
+            double[] coords = GetCoordsFromTextField();
             if (coords == null)
             {
                 MessageBox.Show("Speichern nicht möglich: Koordinaten nicht vorhanden oder im falschen Format");
@@ -144,10 +150,10 @@ namespace ExifTool
                 return;
             }
             
-            exifForCurrentImage.SetAutor(Photographer.Text);
-            exifForCurrentImage.SetGPSCoordinates(coords);
-            exifForCurrentImage.SetCountryName(Countryname.Text);
-            exifForCurrentImage.saveImage();
+            _exifForCurrentImage.SetAutor(Photographer.Text);
+            _exifForCurrentImage.SetGPSCoordinates(coords);
+            _exifForCurrentImage.SetCountryName(Countryname.Text);
+            _exifForCurrentImage.saveImage(_destinationPath);
             
             LoadNextImage(true);
         }
@@ -156,7 +162,7 @@ namespace ExifTool
         /// formats the coordinates from the GPS-coordinates textbox
         /// </summary>
         /// <returns></returns>
-        private double[] getCoordsFromTextField()
+        private double[] GetCoordsFromTextField()
         {
             double[] coords = new double[2];
             try
@@ -165,8 +171,7 @@ namespace ExifTool
                 if (coordinates[0] == "") return null;
 
 
-                NumberFormatInfo provider = new NumberFormatInfo();
-                provider.NumberDecimalSeparator = ".";
+                NumberFormatInfo provider = new NumberFormatInfo {NumberDecimalSeparator = "."};
 
                 coords[0] = Convert.ToDouble(coordinates[0], provider);
                 coords[1] = Convert.ToDouble(coordinates[1], provider);
@@ -183,30 +188,30 @@ namespace ExifTool
         /// </summary>
         private void LoadNextImage(bool next)
         {
-            var img = next ? control.NextPicture() : control.PrevPicture();
+            var img = next ? _control.NextPicture() : _control.PrevPicture();
             if (img != null)
             {
-                exifForCurrentImage = new Exif(img);
-                double[] coordinates = exifForCurrentImage.GetGPSCoordinates();
+                _exifForCurrentImage = new Exif(img);
+                double[] coordinates = _exifForCurrentImage.GetGPSCoordinates();
                 string artistName = Photographer.Text;
-                if (!exifForCurrentImage.GetAutor().Equals(String.Empty))
+                if (!_exifForCurrentImage.GetAutor().Equals(String.Empty))
                 {
-                    artistName = exifForCurrentImage.GetAutor();
+                    artistName = _exifForCurrentImage.GetAutor();
                 }
 
                 string countryName = "";
                 if (coordinates != null) countryName = CountryNames.getCountryName(coordinates);
 
-                updateUIForCurrentIMG(coordinates, countryName, artistName);
+                UpdateUiForCurrentImg(coordinates, countryName, artistName);
             }
             else
             {
-                directoryOpen = false;
                 if (next)
                 {
-                    clearUI();
-                    uiImage = null;
-                    exifForCurrentImage = null;
+                    _directoryOpen = false;
+                    ClearUi();
+                    _uiImage = null;
+                    _exifForCurrentImage = null;
                     MessageBox.Show("Keine weiteren Bilder in diesem Verzeichnis");
                 }
                 else
@@ -216,11 +221,11 @@ namespace ExifTool
             }
         }
 
-        private void clearUI()
+        private void ClearUi()
         {
-            if (uiImage != null)
+            if (_uiImage != null)
             {
-                sp.Children.Remove(uiImage);
+                sp.Children.Remove(_uiImage);
             }
             Photographer.Text = "";
             Countryname.Text = "";
@@ -230,7 +235,7 @@ namespace ExifTool
 
         private void btn_skipImage(object sender, RoutedEventArgs e)
         {
-            if (directoryOpen)
+            if (_directoryOpen)
             {
                 LoadNextImage(true);
             }
@@ -238,7 +243,7 @@ namespace ExifTool
 
         private void btn_prevImage(object sender, RoutedEventArgs e)
         {
-            if(directoryOpen)
+            if(_directoryOpen)
             {
                 LoadNextImage(false);
             }
@@ -252,6 +257,21 @@ namespace ExifTool
         private void open_gmaps(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.google.de/maps/@" + Regex.Replace(Coordinates.Text, @"\s+", "") +  ",10z"); 
+        }
+
+        private void btn_setDestination(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                SelectedPath = AppSettings.GetAppSettings(_pathProperty)
+            };
+            var result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                _destinationPath = dialog.SelectedPath;
+                Destinationpath.Content = dialog.SelectedPath;
+            }
         }
     }
 }

@@ -5,32 +5,17 @@ namespace ExifTool
 {
     public class CustomImage
     {
-        private Image _image;
-        private string _path;
-        private string _bufferpath;
-
         public CustomImage(string path)
         {
-            _path = path;
-            _image = Image.FromFile(_path);
-            _bufferpath = System.IO.Path.GetDirectoryName(_path) + "\\new_" + System.IO.Path.GetFileName(_path);
+            Path = path;
+            Image = Image.FromFile(Path);
+            Bufferpath = System.IO.Path.GetDirectoryName(Path) + "\\new_" + System.IO.Path.GetFileName(Path);
         }
 
-        public Image Image
-        {
-            get { return _image; }
-        }
-        
-        public string Path
-        {
-            get { return _path; }
-        }
+        public Image Image { get; }
 
-        public string Bufferpath
-        {
-            get { return _bufferpath; }
-            set { _bufferpath = value; }
-        }
+        public string Path { get; }
 
+        public string Bufferpath { get; }
     }
 }

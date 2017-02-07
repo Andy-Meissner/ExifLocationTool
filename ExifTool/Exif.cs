@@ -65,14 +65,24 @@ namespace ExifTool
             }
         }
         
-        public void saveImage()
+        public void saveImage(string destPath)
         {
+            string path;
+            if (destPath.Equals(String.Empty))
+            {
+                path = _thisIMG.Path;
+            }
+            else
+            {
+                path = destPath + @"\\" + Path.GetFileName(_thisIMG.Path);
+            }
+
             try
             {
                 _thisIMG.Image.Save(_thisIMG.Bufferpath, System.Drawing.Imaging.ImageFormat.Jpeg);
                 _thisIMG.Image.Dispose();
                 File.Delete(_thisIMG.Path);
-                System.IO.File.Move(_thisIMG.Bufferpath, _thisIMG.Path);
+                File.Move(_thisIMG.Bufferpath, path);
             }
             catch
             {

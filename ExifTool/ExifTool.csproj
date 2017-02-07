@@ -185,6 +185,21 @@
   <ItemGroup>
     <Resource Include="camera_unmount%281%29.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="left_arrow.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="right_arrow.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="save.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="1486416067_google_maps.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="google_maps.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
