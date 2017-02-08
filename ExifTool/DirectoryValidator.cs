@@ -5,27 +5,27 @@ using System.Linq;
 
 namespace ExifTool
 {
-    public class Validator
+    public class DirectoryValidator
     {
-        private List<String> consoleArguments;
+        private readonly List<String> _consoleArguments;
 
-        public Validator(String[] args)
+        public DirectoryValidator(String[] args)
         {
-            consoleArguments = args.ToList<String>();
+            _consoleArguments = args.ToList<String>();
         }
 
-        public Validator(string path)
+        public DirectoryValidator(string path)
         {
-            consoleArguments = new List<string>();
-            consoleArguments.Add(path);
+            _consoleArguments = new List<string>();
+            _consoleArguments.Add(path);
         }
 
         public List<String> GetAllValidPaths()
         {
             List<String> imgPathList = new List<string>();
 
-            var argumentImgPaths = consoleArguments.FindAll(path => IsImage(path));
-            var argumentDirPaths = consoleArguments.FindAll(path => IsDirectory(path));
+            var argumentImgPaths = _consoleArguments.FindAll(IsImage);
+            var argumentDirPaths = _consoleArguments.FindAll(IsDirectory);
             var imgPathsFromDir = GetAllImagesPaths(argumentDirPaths);
 
             imgPathList.AddRange(argumentImgPaths);
@@ -57,8 +57,8 @@ namespace ExifTool
         private bool IsImage(String path)
         {
             bool fileExists = File.Exists(path);
-            bool isJPG = path.ToUpperInvariant().EndsWith(".JPG");
-            return fileExists && isJPG;
+            bool isJpg = path.ToUpperInvariant().EndsWith(".JPG");
+            return fileExists && isJpg;
         }
 
         private bool IsDirectory(String path)

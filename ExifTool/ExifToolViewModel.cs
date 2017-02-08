@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -11,12 +12,13 @@ namespace ExifTool
 {
     public class ExifToolViewModel
     {
-        private CustomImage _currentImage;
+        private ImageModel _currentImage;
         private DirectoryControl _currentDir;
 
         public ExifToolViewModel()
         {
-
+            _currentDir = new DirectoryControl();
+            _currentImage = new ImageModel();
         }
 
         public ICommand GetSourceFolder
@@ -33,19 +35,32 @@ namespace ExifTool
             set { _currentDir = value; }
         }
 
-        public CustomImage CurrentImage
+        public ImageModel CurrentImage
         {
             get { return _currentImage; }
             set { _currentImage = value; }
         }
 
-
         void OpenSourceFolderDialogExecute()
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.ShowDialog();
-            this.CurrentDir.SourceDirectory = dialog.SelectedPath;
+            var result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                this.CurrentDir.OpenDirectory(dialog.SelectedPath);
+                LoadImage();
+            }
         }
+
+        private void LoadImage()
+        {
+            var currentImage = this.CurrentDir.NextImage();
+            if (currentImage != null)
+            {
+                CurrentImage.ImagePath = currentImage.Path;
+            }
+        }
+
         public ICommand GetDestinationFolder
         {
             get
@@ -57,8 +72,8 @@ namespace ExifTool
         void OpenDestFolderDialogExecute()
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.ShowDialog();
-            this.CurrentDir.DestinationDirectory = dialog.SelectedPath;
+            var result = dialog.ShowDialog();
+            if(result == DialogResult.OK && CurrentDir != null) this.CurrentDir.DestinationDirectory = dialog.SelectedPath;
         }
 
         public ICommand GetPrevImage

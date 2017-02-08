@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace ExifTool
 {
@@ -18,30 +20,11 @@ namespace ExifTool
 
         public string Bufferpath { get; }
 
-        private string _GPSLocation;
-
-        public string GPSLocation
-        {
-            get { return _GPSLocation; }
-            set { _GPSLocation = value; }
-        }
-
-        private string _countryName;
-
-        public string CountryName
-        {
-            get { return _countryName; }
-            set { _countryName = value; }
-        }
-
-        private string _photographer;
-
-        public string Photographer
-        {
-            get { return _photographer; }
-            set { _photographer = value; }
-        }
+        public string GpsLocation { get; set; }
 
 
+        public string CountryName { get; set; }
+
+        public string Photographer { get; set; }
     }
 }

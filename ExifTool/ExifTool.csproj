@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>camera_unmount%281%29.ico</ApplicationIcon>
+    <ApplicationIcon>camera_unmount.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>A0C24DD9A73F594CFAA410A60B8E3B0CB5CF6521</ManifestCertificateThumbprint>
@@ -122,15 +122,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="Controller.cs" />
     <Compile Include="DirectoryControl.cs" />
     <Compile Include="ExifToolViewModel.cs" />
+    <Compile Include="ImageModel.cs" />
+    <Compile Include="ModelBase.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="TypeConverter.cs" />
     <Compile Include="CountryNames.cs" />
     <Compile Include="Exif.cs" />
     <Compile Include="HttpRequest.cs" />
-    <Compile Include="Validator.cs" />
+    <Compile Include="DirectoryValidator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -189,22 +190,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="camera_unmount%281%29.ico" />
+    <Resource Include="Resources\left_arrow.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="left_arrow.ico" />
+    <Resource Include="Resources\right_arrow.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="right_arrow.ico" />
+    <Resource Include="Resources\save.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="save.ico" />
+    <Resource Include="Resources\camera_unmount.ico" />
+    <Resource Include="Resources\google_maps.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="1486416067_google_maps.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="google_maps.png" />
+    <Resource Include="camera_unmount.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

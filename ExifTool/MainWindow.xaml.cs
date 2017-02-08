@@ -16,7 +16,6 @@ namespace ExifTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        Controller _control;
         private Exif _exifForCurrentImage;
         private readonly string _pathProperty = "DirectoryPath";
         private string _destinationPath;
@@ -76,7 +75,7 @@ namespace ExifTool
             Destinationpath.Content = path;
             _destinationPath = path;
 
-            Validator val = new Validator(path);
+            DirectoryValidator val = new DirectoryValidator(path);
             List<String> imagePaths = val.GetAllValidPaths();
             if (imagePaths.Count == 0) return;
 
