@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,27 @@ namespace ExifTool
             nomByte.CopyTo(result, 0);
             denomByte.CopyTo(result, 4);
             return result;
+        }
+
+        public static double[] GetCoordsFromString(string coordinatesAsString)
+        {
+            double[] coords = new double[2];
+            try
+            {
+                string[] coordinates = coordinatesAsString.Split(',');
+                if (coordinates[0] == "") return null;
+
+
+                NumberFormatInfo provider = new NumberFormatInfo { NumberDecimalSeparator = "." };
+
+                coords[0] = Convert.ToDouble(coordinates[0], provider);
+                coords[1] = Convert.ToDouble(coordinates[1], provider);
+            }
+            catch
+            {
+                return null;
+            }
+            return coords;
         }
     }
 }
