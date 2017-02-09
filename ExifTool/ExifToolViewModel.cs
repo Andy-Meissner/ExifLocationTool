@@ -1,131 +1,108 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Navigation;
+using ExifTool.BusinessLogic;
+using ExifTool.Model;
 
 namespace ExifTool
 {
     public class ExifToolViewModel
     {
-        private ImageModel _currentImage;
-        private DirectoryControl _currentDir;
-
+        private readonly Controller _controller;
+        
         public ExifToolViewModel()
         {
-            _currentDir = new DirectoryControl();
-            _currentImage = new ImageModel();
+            DirectoryModel = new DirectoryModel();
+            ImageModel = new ImageModel();
+            _controller = new Controller();
+            ImageModel.PropertyChanged += ImageModel_PropertyChanged;
         }
 
-        public ICommand GetSourceFolder
+        public DirectoryModel DirectoryModel { get; }
+
+        public ImageModel ImageModel { get; }
+
+        public ICommand GetSourceFolder => new RelayCommand(OpenSourceFolderExecute);
+
+        void OpenSourceFolderExecute()
         {
-            get
-            {
-                return new RelayCommand(OpenSourceFolderDialogExecute);
-            }
+            var directoryPath = _controller.OpenSourceFolder();
+            DirectoryModel.SourceDirectory = directoryPath;
+
+            var firstImage = _controller.GetNextImage();
+            ImageModel.SetData(firstImage);
+            
+            DirectoryModel.DestinationDirectory = directoryPath;
         }
 
-        public DirectoryControl CurrentDir
+        public ICommand GetDestinationFolder => new RelayCommand(OpenDestinationFolderExecute, OpenDestinationFolderExecuteable);
+
+        void OpenDestinationFolderExecute()
         {
-            get { return _currentDir; }
-            set { _currentDir = value; }
+            var directoryPath = _controller.OpenDestinationFolder();
+            DirectoryModel.DestinationDirectory = directoryPath;
         }
 
-        public ImageModel CurrentImage
+        bool OpenDestinationFolderExecuteable()
         {
-            get { return _currentImage; }
-            set { _currentImage = value; }
+            return true;
         }
 
-        void OpenSourceFolderDialogExecute()
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            var result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                this.CurrentDir.OpenDirectory(dialog.SelectedPath);
-                LoadImage();
-            }
-        }
-
-        private void LoadImage()
-        {
-            var currentImage = this.CurrentDir.NextImage();
-            if (currentImage != null)
-            {
-                CurrentImage.ImagePath = currentImage.Path;
-            }
-        }
-
-        public ICommand GetDestinationFolder
-        {
-            get
-            {
-                return new RelayCommand(OpenDestFolderDialogExecute);
-            }
-        }
-
-        void OpenDestFolderDialogExecute()
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            var result = dialog.ShowDialog();
-            if(result == DialogResult.OK && CurrentDir != null) this.CurrentDir.DestinationDirectory = dialog.SelectedPath;
-        }
-
-        public ICommand GetPrevImage
-        {
-            get
-            {
-                return new RelayCommand(GetPrevImageExecute);
-            }
-        }
+        public ICommand GetPrevImage => new RelayCommand(GetPrevImageExecute, GetPrevImageExecuteable);
 
         void GetPrevImageExecute()
         {
+            var prevImage = _controller.GetPreviousImage();
+            ImageModel.SetData(prevImage);
         }
 
-        public ICommand GetNextImage
+        bool GetPrevImageExecuteable()
         {
-            get
-            {
-                return new RelayCommand(GetNextImageExecute);
-            }
+            return true;
         }
+
+        public ICommand GetNextImage => new RelayCommand(GetNextImageExecute, GetNextImageExecuteable);
 
         void GetNextImageExecute()
         {
+            var nextImage = _controller.GetNextImage();
+            ImageModel.SetData(nextImage);
         }
 
-        public ICommand SaveImage {
-            get
-            {
-                return new RelayCommand(SaveImageExecute);
-            }
+        bool GetNextImageExecuteable()
+        {
+            return true;
         }
+
+        public ICommand SaveImage => new RelayCommand(SaveImageExecute, SaveImageExecuteable);
 
         void SaveImageExecute()
         {
+            _controller.SaveImage(DirectoryModel.DestinationDirectory);
+            GetNextImageExecute();
         }
 
-        public ICommand OpenGoogleMaps
+        bool SaveImageExecuteable()
         {
-            get
+            return true;
+        }
+
+        public ICommand OpenGoogleMaps => new RelayCommand(_controller.OpenGoogleMapsExecute);
+
+        public void ImageModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "GpsLocation")
             {
-                return new RelayCommand(OpenGoogleMapsExecute);
+                _controller.SetGpsData(ImageModel.GpsLocation);
+                ImageModel.CountryName = _controller.GetCountryForGps(ImageModel.GpsLocation);
             }
-        }
-
-        void OpenGoogleMapsExecute()
-        {
-        }
-
-        public void GetCountryForCoordinates()
-        {
-
+            else if (e.PropertyName == "Photographer")
+            {
+                _controller.SetPhotographer(ImageModel.Photographer);
+            }
+            else if (e.PropertyName == "CountryName")
+            {
+                _controller.SetCountryName(ImageModel.CountryName);
+            }
         }
     }
 }

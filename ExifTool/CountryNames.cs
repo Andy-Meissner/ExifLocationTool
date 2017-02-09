@@ -8,25 +8,25 @@ namespace ExifTool
 {
     public class CountryNames
     {
-        public static string getCountryName(double[] coordinates)
+        public static string GetCountryName(double[] coordinates)
         {
             string countryName = String.Empty;
             double latitude = coordinates[0];
             double longitude = coordinates[1];
+            
+            XDocument xml = GetXmLforCoordinates(latitude, longitude);
 
-            try
+            if (xml.Root != null) countryName = xml.Root.Descendants("country").FirstOrDefault()?.Value;
+
+            if (countryName == null)
             {
-                XDocument xml = getXMLforCoordinates(latitude, longitude);
-                countryName = xml.Root.Descendants("country").FirstOrDefault().Value.ToString();
-            }
-            catch
-            {
+                return String.Empty;
             }
 
             return countryName;
         }
 
-        private static XDocument getXMLforCoordinates(double latitude, double longitude)
+        private static XDocument GetXmLforCoordinates(double latitude, double longitude)
         {
             var locale = CultureInfo.CreateSpecificCulture("en-us");
             string lat = latitude.ToString(locale);
