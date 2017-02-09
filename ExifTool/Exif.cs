@@ -9,24 +9,10 @@ using ImgCoordTool;
 
 namespace ExifTool
 {
-    public class Exif
+    public static class Exif
     {
-        public Exif(CustomImage img)
+        public static double[] GetGpsCoordinates(Image img)
         {
-            _thisIMG = img;
-        }
-
-        private CustomImage _thisIMG;
-
-        public CustomImage Image
-        {
-            get { return _thisIMG; }
-            set { _thisIMG = value; }
-        }
-        
-        public double[] GetGPSCoordinates()
-        {
-            var img = _thisIMG;
             double[] coordinates = new double[2];
             var typeLatitudeRef = 0x0001;
             var typeLatitude = 0x0002;
@@ -34,8 +20,8 @@ namespace ExifTool
             var typeLongitude = 0x0004;
             try
             {
-                double lat = ExifCoordToDouble(img.Image.GetPropertyItem(typeLatitudeRef), img.Image.GetPropertyItem(typeLatitude));
-                double lon = ExifCoordToDouble(img.Image.GetPropertyItem(typeLongitudeRef), img.Image.GetPropertyItem(typeLongitude));
+                double lat = ExifCoordToDouble(img.GetPropertyItem(typeLatitudeRef), img.GetPropertyItem(typeLatitude));
+                double lon = ExifCoordToDouble(img.GetPropertyItem(typeLongitudeRef), img.GetPropertyItem(typeLongitude));
 
                 lat = Math.Round(lat, 6);
                 lon = Math.Round(lon, 6);
@@ -50,60 +36,48 @@ namespace ExifTool
             }
         }
 
-        public string GetAutor()
+        public static string GetAutor(Image img)
         {
-            var img = _thisIMG;
             try
             {
-                PropertyItem artistProperty = img.Image.GetPropertyItem(0x013b);
+                PropertyItem artistProperty = img.GetPropertyItem(0x013b);
                 string name = Encoding.Unicode.GetString(artistProperty.Value);
                 return name.Remove(name.Length - 1);
             }
             catch
             {
-                return "";
+                return String.Empty;
             }
         }
         
-        public void saveImage()
-        {
-            try
-            {
-                _thisIMG.Image.Save(_thisIMG.Bufferpath, System.Drawing.Imaging.ImageFormat.Jpeg);
-                _thisIMG.Image.Dispose();
-                File.Delete(_thisIMG.Path);
-                System.IO.File.Move(_thisIMG.Bufferpath, _thisIMG.Path);
-            }
-            catch
-            {
-                return;
-            }
-        }
+
         
-        public bool SetAutor(string autorName)
+        public static Image SetAutor(string autorName, Image img)
         {
             // Type : 1 --> Only type that worked with unicode for the artist property
             try
             {
-                PropertyItem item = _thisIMG.Image.PropertyItems[0];
+                var image = img;
+                PropertyItem item = image.PropertyItems[0];
                 var dataBytes = Encoding.Unicode.GetBytes(autorName + "\0");
-                item = getNewPropertyItem(item, 1, 0x013b, dataBytes);
-                _thisIMG.Image.SetPropertyItem(item);
+                item = GetNewPropertyItem(item, 1, 0x013b, dataBytes);
+                image.SetPropertyItem(item);
+                return image;
             }
             catch
             {
-                return false;
+                return img;
             }
-            return true;
         }
 
-        public bool SetCountryName(string countryName)
+        public static Image SetCountryName(string countryName, Image img)
         {
             // Type : 7 --> Only type that worked with unicode for the UserComment property
             try
             {
-                PropertyItem item = _thisIMG.Image.PropertyItems[0];
-                var dataBytes = convertStringForExif(countryName);
+                var image = img;
+                PropertyItem item = image.PropertyItems[0];
+                var dataBytes = ConvertStringForExif(countryName);
 
                 byte[] unicode = new byte[] { 0x55, 0x4E, 0x49, 0x43, 0x4F, 0x44, 0x45, 0x00 };
                 byte[] result = new byte[dataBytes.Length + unicode.Length];
@@ -111,57 +85,59 @@ namespace ExifTool
                 unicode.CopyTo(result, 0);
                 dataBytes.CopyTo(result, 8);
 
-                item = getNewPropertyItem(item, 7, 0x9286, result);
-                _thisIMG.Image.SetPropertyItem(item);
+                item = GetNewPropertyItem(item, 7, 0x9286, result);
+                image.SetPropertyItem(item);
+                return image;
             }
             catch
             {
-                return false;
+                return img;
             }
-            return true;
         }
-        private byte[] convertStringForExif(string value)
+
+        private static byte[] ConvertStringForExif(string value)
         {
             // String needs to be 0-terminated, so an extra char hast to be added
             byte[] bValue = Encoding.Unicode.GetBytes(value);
             return bValue;
         }
 
-        public bool SetGPSCoordinates(double[] coordinates)
+        public static Image SetGpsCoordinates(double[] coordinates, Image img)
         {
             double latitude = coordinates[0];
             double longitude = coordinates[1];
 
             try
             {
+                var image = img;
                 // set Latitude
-                PropertyItem item = _thisIMG.Image.PropertyItems[0];
-                var dataBytes = getGPSReference(latitude, true);
-                item = getNewPropertyItem(item, 2, 0x0001, dataBytes);
-                _thisIMG.Image.SetPropertyItem(item);
+                PropertyItem item = image.PropertyItems[0];
+                var dataBytes = GetGpsReference(latitude, true);
+                item = GetNewPropertyItem(item, 2, 0x0001, dataBytes);
+                image.SetPropertyItem(item);
 
-                dataBytes = convertCoordinate(latitude);
-                item = getNewPropertyItem(item, 5, 0x0002, dataBytes);
-                _thisIMG.Image.SetPropertyItem(item);
+                dataBytes = ConvertCoordinate(latitude);
+                item = GetNewPropertyItem(item, 5, 0x0002, dataBytes);
+                image.SetPropertyItem(item);
 
                 // set Longitude:
 
-                dataBytes = getGPSReference(longitude, false);
-                item = getNewPropertyItem(item, 2, 0x0003, dataBytes);
-                _thisIMG.Image.SetPropertyItem(item);
+                dataBytes = GetGpsReference(longitude, false);
+                item = GetNewPropertyItem(item, 2, 0x0003, dataBytes);
+                image.SetPropertyItem(item);
 
-                dataBytes = convertCoordinate(longitude);
-                item = getNewPropertyItem(item, 5, 0x0004, dataBytes);
-                _thisIMG.Image.SetPropertyItem(item);
+                dataBytes = ConvertCoordinate(longitude);
+                item = GetNewPropertyItem(item, 5, 0x0004, dataBytes);
+                image.SetPropertyItem(item);
+                return image;
             }
             catch
             {
-                return false;
+                return img;
             }
-            return true;
         }
 
-        private byte[] convertCoordinate(double coordinateValue)
+        private static byte[] ConvertCoordinate(double coordinateValue)
         {
             coordinateValue = Math.Abs(coordinateValue);
             byte[] bytes = new byte[24];
@@ -181,29 +157,29 @@ namespace ExifTool
             return bytes;
         }
 
-        private byte[] getGPSReference(double coordinateValue, bool isLatitude)
+        private static byte[] GetGpsReference(double coordinateValue, bool isLatitude)
         {
             bool isNegative = coordinateValue < 0;
-            char GPSRef;
+            char gpsRef;
             byte[] result = new byte[2];
 
             if (isLatitude)
             {
-                GPSRef = isNegative ? 'S' : 'N';
+                gpsRef = isNegative ? 'S' : 'N';
             }
             else
             {
-                GPSRef = isNegative ? 'W' : 'E';
+                gpsRef = isNegative ? 'W' : 'E';
             }
 
-            result[0] = Convert.ToByte(GPSRef);
+            result[0] = Convert.ToByte(gpsRef);
             result[1] = 0;
 
             return result;
         }
         
 
-        private PropertyItem getNewPropertyItem(PropertyItem item, short type, int id, byte[] value)
+        private static PropertyItem GetNewPropertyItem(PropertyItem item, short type, int id, byte[] value)
         {
             item.Type = type;
             item.Id = id;
@@ -212,7 +188,7 @@ namespace ExifTool
 
             return item;
         }
-        private double ExifCoordToDouble(PropertyItem propItemRef, PropertyItem propItem)
+        private static double ExifCoordToDouble(PropertyItem propItemRef, PropertyItem propItem)
         {
             double degreesNumerator = BitConverter.ToUInt32(propItem.Value, 0);
             double degreesDenominator = BitConverter.ToUInt32(propItem.Value, 4);
