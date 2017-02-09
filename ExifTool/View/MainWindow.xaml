@@ -49,13 +49,13 @@
         <Label Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Grid.Row="6" Width="268" />
         <Label Content="{Binding Path=ImageModel.ImagePath}" HorizontalAlignment="Right" Grid.Row="6" Width="442"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="7" HorizontalAlignment="Right" Width="482" TextWrapping="Wrap" Text="{Binding Path=ImageModel.GpsLocation}"></TextBox>
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="7" Margin="3,3,3,3" HorizontalAlignment="Right" Width="482" TextWrapping="Wrap" Text="{Binding Path=ImageModel.GpsLocation}"></TextBox>
         <Label Content="Koordinaten" HorizontalAlignment="Left" Grid.Row="7" Width="185"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="8" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.CountryName}" Width="482"/>
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="8" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.CountryName}" Width="482"/>
         <Label Grid.Row="8" Content="Land" HorizontalAlignment="Left" Width="185"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="9" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.Photographer}" Width="482"/>
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="9" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.Photographer}" Width="482"/>
         <Label Content="Fotograf" HorizontalAlignment="Left" Grid.Row="9"  Width="185"/>
 
         

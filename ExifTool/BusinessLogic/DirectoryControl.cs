@@ -18,7 +18,7 @@ namespace ExifTool.BusinessLogic
 
         public string OpenDirectory()
         {
-            var path = GetPath();
+            var path = GetPathFromFolderDialog();
 
             if (!path.Equals(String.Empty))
             {
@@ -30,12 +30,17 @@ namespace ExifTool.BusinessLogic
             return path;
         }
 
-        public string GetPath()
+        public string GetPathFromFolderDialog()
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
+
+            string path = AppSettings.GetAppSettings("DirectoryPath");
+            dialog.SelectedPath = path;
+
             var result = dialog.ShowDialog();
             if (result == DialogResult.OK)
             {
+                AppSettings.SetAppSettings("DirectoryPath",dialog.SelectedPath);
                 return dialog.SelectedPath;
             }
             else

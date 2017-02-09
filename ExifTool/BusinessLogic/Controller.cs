@@ -26,7 +26,7 @@ namespace ExifTool.BusinessLogic
 
         public string OpenDestinationFolder()
         {
-            return _directoryController.GetPath();
+            return _directoryController.GetPathFromFolderDialog();
         }
 
         public CustomImage GetNextImage()
