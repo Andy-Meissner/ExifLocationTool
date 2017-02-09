@@ -22,10 +22,12 @@ namespace ExifTool.BusinessLogic
 
             if (!path.Equals(String.Empty))
             {
+                _imagePaths = new List<string>();
                 DirectoryValidator val = new DirectoryValidator(path);
                 List<string> paths = val.GetAllValidPaths();
                 var sortedPaths = SortPaths(paths);
                 _imagePaths.AddRange(sortedPaths);
+                _position = -1;
             }
             return path;
         }
@@ -60,32 +62,46 @@ namespace ExifTool.BusinessLogic
 
         public CustomImage NextImage()
         {
-            try
+            var nextPos = _position + 1;
+            if (nextPos < _imagePaths.Count)
             {
                 _position++;
                 string nextElement = _imagePaths[_position];
                 return new CustomImage(nextElement);
             }
-            catch
-            {
-                _position--;
-                return null;
-            }
+            return null;
         }
 
         public CustomImage PrevImage()
         {
-            try
+            var prevPos = _position - 1;
+            if (prevPos > -1)
             {
                 _position--;
                 string prevElement = _imagePaths[_position];
                 return new CustomImage(prevElement);
             }
-            catch
+            return null;
+        }
+
+        public bool LastPicInDir()
+        {
+            if (_imagePaths.Count == 0) return true;
+            if (_position + 1 == _imagePaths.Count)
             {
-                _position++;
-                return null;
+                return true;
             }
+            return false;
+        }
+
+        public bool FirstPicInDir()
+        {
+            if (_imagePaths.Count == 0) return true;
+            if (_position == 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

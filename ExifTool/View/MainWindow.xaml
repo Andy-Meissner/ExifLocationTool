@@ -5,73 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:exifTool="clr-namespace:ExifTool"
         mc:Ignorable="d"
-        Title="ExifTool" Height="902.017" Width="700">
+        Title="ExifTool" Height="820" Width="700">
     <Window.DataContext>
         <exifTool:ExifToolViewModel/>
     </Window.DataContext>
 
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="30"/>
-            <RowDefinition MinHeight="30"/>
-            <RowDefinition MinHeight="30"/>
-            <RowDefinition MinHeight="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition MinHeight="460"/>
             <RowDefinition MinHeight="40"/>
-            <RowDefinition MinHeight="40"/>
-            <RowDefinition MinHeight="40"/>
-            <RowDefinition MinHeight="40"/>
-            <RowDefinition MinHeight="40"/>
-            <RowDefinition MinHeight="40"/>
+            <RowDefinition MinHeight="50"/>
+            <RowDefinition MinHeight="30"/>
+            <RowDefinition MinHeight="30"/>
+            <RowDefinition MinHeight="30"/>
+            <RowDefinition MinHeight="30"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Path=DirectoryModel.SourceDirectory}" Margin="0,5,0,0"/>
-        <Button Grid.Row="1" Content="Quellverzeichnis öffnen" Command="{Binding GetSourceFolder}" Margin="0,0,0,5"/>
-        
-        <Label Grid.Row="2" Content="{Binding Path=DirectoryModel.DestinationDirectory}"  Margin="0,5,0,0"/>
-        <Button Grid.Row="3" Content="Zielverzeichnis setzen" Command="{Binding GetDestinationFolder}" Margin="0,0,0,5"/>
+        <Label Grid.Row="0" Content="{Binding Path=DirectoryModel.SourceDirectory}" HorizontalAlignment="Right" Width="557"/>
+        <Button Grid.Row="0" Content="Quelle" Command="{Binding GetSourceFolder}" Width="100" HorizontalAlignment="Left" Margin="0,3,0,3"/>
+
+        <Label Grid.Row="1" Content="{Binding Path=DirectoryModel.DestinationDirectory}"  HorizontalAlignment="Right" Width="557"/>
+        <Button Grid.Row="1" Content="Ziel" Command="{Binding GetDestinationFolder}" Width="100" HorizontalAlignment="Left" Margin="0,3,0,3"/>
 
         <Image 
             Margin="0,5,0,5" 
             Height="450" 
             Stretch="UniformToFill"
-            Grid.Row="4" 
+            Grid.Row="2" 
             Source="{Binding Path=ImageModel.ImageSource}"
             />
 
-        <Button Command="{Binding Path=GetPrevImage}" HorizontalAlignment="Left" Width="100" Grid.Row="5" Margin="0,5,0,5">
+        <Button Command="{Binding Path=GetPrevImage}" HorizontalAlignment="Left" Width="100" Grid.Row="3" Margin="0,5,0,5">
             <Image Height="22" Source="../Resources/left_arrow.ico" Stretch="Fill" Width="41"/>
         </Button>
-        <Button Command="{Binding Path=GetNextImage}" HorizontalAlignment="Right" Width="100" Grid.Row="5" Margin="0,5,0,5">
+        <Button Command="{Binding Path=GetNextImage}" HorizontalAlignment="Right" Width="100" Grid.Row="3" Margin="0,5,0,5">
             <Image Height="22" Source="../Resources/right_arrow.ico" Stretch="Fill" Width="41"/>
         </Button>
-        
-        <Label Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Grid.Row="6" Width="268" />
-        <Label Content="{Binding Path=ImageModel.ImagePath}" HorizontalAlignment="Right" Grid.Row="6" Width="442"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="7" Margin="3,3,3,3" HorizontalAlignment="Right" Width="482" TextWrapping="Wrap" Text="{Binding Path=ImageModel.GpsLocation}"></TextBox>
-        <Label Content="Koordinaten" HorizontalAlignment="Left" Grid.Row="7" Width="185"/>
+        <Label Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Grid.Row="4" Width="268" />
+        <Label Content="{Binding Path=ImageModel.ImagePath}" HorizontalAlignment="Right" Grid.Row="4" Width="442"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="8" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.CountryName}" Width="482"/>
-        <Label Grid.Row="8" Content="Land" HorizontalAlignment="Left" Width="185"/>
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="5" Margin="3,3,3,3" HorizontalAlignment="Right" Width="482" TextWrapping="Wrap" Text="{Binding Path=ImageModel.GpsLocation}"></TextBox>
+        <Label Content="Koordinaten" HorizontalAlignment="Left" Grid.Row="5" Width="185"/>
 
-        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="9" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.Photographer}" Width="482"/>
-        <Label Content="Fotograf" HorizontalAlignment="Left" Grid.Row="9"  Width="185"/>
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="6" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.CountryName}" Width="482"/>
+        <Label Grid.Row="6" Content="Land" HorizontalAlignment="Left" Width="185"/>
 
-        
-        <Button Command="{Binding Path=SaveImage}" HorizontalAlignment="Right" Grid.Row="10" Width="190"  >
+        <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="7" Margin="3,3,3,3" HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Path=ImageModel.Photographer}" Width="482"/>
+        <Label Content="Fotograf" HorizontalAlignment="Left" Grid.Row="7"  Width="185"/>
+
+
+        <Button Command="{Binding Path=SaveImage}" HorizontalAlignment="Right" Grid.Row="8" Width="190"  >
             <Grid>
                 <Image Height="25" Source="../Resources/save.ico" Stretch="Fill" Width="25" Margin="0,0,100,0"/>
                 <Label Content="Daten speichern" Margin="28,0,-28,0"/>
             </Grid>
         </Button>
-        <Button Command="{Binding Path=OpenGoogleMaps}" HorizontalAlignment="Left" Grid.Row="10" Width="190">
+        <Button Command="{Binding Path=OpenGoogleMaps}" HorizontalAlignment="Left" Grid.Row="8" Width="190">
             <Grid>
                 <Image Height="25" Source="../Resources/google_maps.png" Stretch="Fill" Width="25" Margin="0,0,120,0"/>
                 <Label Content="Koordinaten öffnen" Margin="28,0,-28,0"></Label>
             </Grid>
         </Button>
-        
+
     </Grid>
 </Window>
 

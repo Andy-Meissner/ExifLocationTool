@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace ExifTool.BusinessLogic
 {
-    public class Controller
+    public class ViewModelController
     {
         private readonly DirectoryControl _directoryController;
         private CustomImage _currentImage;
 
-        public Controller()
+        public ViewModelController()
         {
             _directoryController = new DirectoryControl();
         }
@@ -80,7 +80,6 @@ namespace ExifTool.BusinessLogic
             {
                 _currentImage.Photographer = textboxPhotographer;
             }
-
         }
 
         public string GetCountryForGps(string textboxGpsData)
@@ -100,6 +99,15 @@ namespace ExifTool.BusinessLogic
             _currentImage.SetExifData();
             _currentImage.SaveImage(destination);
         }
-        
+
+        public bool LastImgInDir()
+        {
+            return _directoryController.LastPicInDir();
+        }
+
+        public bool FirstImgInDir()
+        {
+            return _directoryController.FirstPicInDir();
+        }
     }
 }

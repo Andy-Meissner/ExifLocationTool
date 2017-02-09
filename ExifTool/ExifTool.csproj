@@ -142,7 +142,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="BusinessLogic\Controller.cs" />
+    <Compile Include="BusinessLogic\ViewModelController.cs" />
     <Compile Include="BusinessLogic\DirectoryControl.cs" />
     <Compile Include="Model\DirectoryModel.cs" />
     <Compile Include="ExifToolViewModel.cs" />
