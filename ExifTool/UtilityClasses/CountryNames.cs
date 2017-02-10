@@ -38,7 +38,7 @@ namespace ExifTool.UtilityClasses
             string lat = latitude.ToString(locale);
             string lon = longitude.ToString(locale);
 
-            var url = "http://nominatim.openstreetmap.org/reverse?format=xml&lat=" + lat+ "&lon=" + lon +  "&zoom=1&addressdetails=1";
+            var url = "http://nominatim.openstreetmap.org/reverse?format=xml&lat=" + lat+ "&lon=" + lon +  "&zoom=10&addressdetails=1";
             HttpRequest request = new HttpRequest(url);
             return request.GetXmlDoc();
         }

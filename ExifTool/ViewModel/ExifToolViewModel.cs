@@ -78,7 +78,9 @@ namespace ExifTool.ViewModel
 
         void SaveImageExecute()
         {
-            _viewModelController.SaveImage(DirectoryModel.DestinationDirectory);
+            var destination = DirectoryModel.DestinationDirectory;
+            var source = DirectoryModel.SourceDirectory;
+            _viewModelController.SaveImage(destination, source);
             GetNextImageExecute();
         }
 

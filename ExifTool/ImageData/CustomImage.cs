@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using ExifTool.UtilityClasses;
 
 namespace ExifTool.ImageData
@@ -11,7 +13,13 @@ namespace ExifTool.ImageData
         public CustomImage(string path)
         {
             Path = path;
-            Image = Image.FromFile(Path);
+            try
+            {
+                Image = Image.FromFile(Path);
+            }
+            catch {
+                return; 
+            }
             Photographer = String.Empty;
             CountryName = String.Empty;;
             GpsLocation = String.Empty;
@@ -31,20 +39,30 @@ namespace ExifTool.ImageData
 
         public string Photographer { get; set; }
 
-        public void SaveImage(string directoryPath)
+        public bool SaveImage(string directoryPath)
         {
             try
             {
                 Image.Save(Bufferpath, System.Drawing.Imaging.ImageFormat.Jpeg);
                 Image.Dispose();
-                var newPath = directoryPath + @"\" + System.IO.Path.GetFileName(Path);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Bild konnte nicht zwischengespeichert gespeichert werden: " + e.Message);
+                return false;
+            }
+            try
+            {
                 File.Delete(Path);
+                var newPath = directoryPath + @"\" + System.IO.Path.GetFileName(Path);
                 File.Move(Bufferpath, newPath);
             }
-            catch 
+            catch (Exception e)
             {
-                return;
+                MessageBox.Show("Fehler beim Speichern: " + e.Message);
+                return false;
             }
+            return true;
         }
 
         public void ReadExifData()
@@ -59,12 +77,21 @@ namespace ExifTool.ImageData
             }
         }
 
-        public void SetExifData()
+        public bool SetExifData()
         {
-            Image = Exif.SetAutor(Photographer, Image);
-            Image = Exif.SetCountryName(CountryName, Image);
-            var coordinates = TypeConverter.GetCoordsFromString(GpsLocation);
-            Image = Exif.SetGpsCoordinates(coordinates,Image);
+            try
+            {
+                Image = Exif.SetAutor(Photographer, Image);
+                Image = Exif.SetCountryName(CountryName, Image);
+                var coordinates = TypeConverter.GetCoordsFromString(GpsLocation);
+                Image = Exif.SetGpsCoordinates(coordinates, Image);
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Daten fehlerhaft: " + e.Message);
+                return false;
+            }
         }
     }
 }

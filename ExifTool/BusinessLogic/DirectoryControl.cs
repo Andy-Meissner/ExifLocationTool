@@ -24,15 +24,27 @@ namespace ExifTool.BusinessLogic
 
             if (!path.Equals(String.Empty))
             {
-                _imagePaths = new List<string>();
-                DirectoryValidator val = new DirectoryValidator(path);
-                List<string> paths = val.GetAllValidPaths();
-                var sortedPaths = SortPaths(paths);
-                _imagePaths.AddRange(sortedPaths);
+                InitDirectoryControl(path);
                 _position = -1;
             }
             return path;
         }
+
+        public void InitDirectoryControl(string path)
+        {
+            _imagePaths = new List<string>();
+            DirectoryValidator val = new DirectoryValidator(path);
+            List<string> paths = val.GetAllValidPaths();
+            var sortedPaths = SortPaths(paths);
+            _imagePaths.AddRange(sortedPaths);
+        }
+
+        public void DirectoryChanged(string path)
+        {
+            InitDirectoryControl(path);
+            _position--;
+        }
+
 
         public string GetPathFromFolderDialog()
         {

@@ -102,10 +102,15 @@ namespace ExifTool.BusinessLogic
             return String.Empty;
         }
 
-        public void SaveImage(string destination)
+        public void SaveImage(string destination,string source)
         {
-            _currentImage.SetExifData();
-            _currentImage.SaveImage(destination);
+            if (_currentImage.SetExifData())
+            {
+                if (_currentImage.SaveImage(destination) && source != destination)
+                {
+                    _directoryController.DirectoryChanged(source);
+                }
+            }
         }
 
         public bool LastImgInDir()
