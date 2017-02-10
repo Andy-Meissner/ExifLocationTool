@@ -1,12 +1,10 @@
 ﻿using System;
-using System.CodeDom;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
+using ExifTool.UtilityClasses;
 
-namespace ExifTool
+namespace ExifTool.ImageData
 {
     public class CustomImage
     {

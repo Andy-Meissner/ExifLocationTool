@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using ExifTool.ImageData;
+using ExifTool.UtilityClasses;
 using ns;
 
 namespace ExifTool.BusinessLogic

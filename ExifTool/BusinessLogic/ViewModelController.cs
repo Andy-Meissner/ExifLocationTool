@@ -5,6 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ExifTool.ImageData;
+using ExifTool.Model;
+using ExifTool.UtilityClasses;
 
 namespace ExifTool.BusinessLogic
 {
@@ -43,7 +46,12 @@ namespace ExifTool.BusinessLogic
 
         private CustomImage GetImageWithData(CustomImage img)
         {
-            img?.ReadExifData();
+            if(img != null)
+            {
+                MethodInvoker simpleDelegate = new MethodInvoker(img.ReadExifData);
+                IAsyncResult tag = simpleDelegate.BeginInvoke(null,null);
+                simpleDelegate.EndInvoke(tag);
+            }
             _currentImage = img;
             return img;
         }

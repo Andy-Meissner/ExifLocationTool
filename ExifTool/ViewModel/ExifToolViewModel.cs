@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
 using ExifTool.BusinessLogic;
 using ExifTool.Model;
+using ExifTool.UtilityClasses;
 
-namespace ExifTool
+namespace ExifTool.ViewModel
 {
     public class ExifToolViewModel
     {
@@ -93,7 +94,8 @@ namespace ExifTool
             if (e.PropertyName == "GpsLocation")
             {
                 _viewModelController.SetGpsData(ImageModel.GpsLocation);
-                ImageModel.CountryName = _viewModelController.GetCountryForGps(ImageModel.GpsLocation);
+                MethodInvoker simpleDelegate = new MethodInvoker(LoadCountryNameFromGps);
+                simpleDelegate.BeginInvoke(null, null);
             }
             else if (e.PropertyName == "Photographer")
             {
@@ -103,6 +105,11 @@ namespace ExifTool
             {
                 _viewModelController.SetCountryName(ImageModel.CountryName);
             }
+        }
+
+        private void LoadCountryNameFromGps()
+        {
+            ImageModel.CountryName = _viewModelController.GetCountryForGps(ImageModel.GpsLocation);
         }
     }
 }

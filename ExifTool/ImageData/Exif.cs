@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
-using System.Runtime.Serialization;
-using System.Drawing;
-using System.IO;
-using ImgCoordTool;
+using ExifTool.UtilityClasses;
 
-namespace ExifTool
+namespace ExifTool.ImageData
 {
     public static class Exif
     {

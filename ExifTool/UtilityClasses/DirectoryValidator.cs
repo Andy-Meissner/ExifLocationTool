@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ExifTool
+namespace ExifTool.UtilityClasses
 {
     public class DirectoryValidator
     {

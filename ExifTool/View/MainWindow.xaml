@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:exifTool="clr-namespace:ExifTool"
+        xmlns:viewModel="clr-namespace:ExifTool.ViewModel"
         mc:Ignorable="d"
         Title="ExifTool" Height="820" Width="700">
     <Window.DataContext>
-        <exifTool:ExifToolViewModel/>
+        <viewModel:ExifToolViewModel/>
     </Window.DataContext>
 
     <Grid Margin="10,10,10,10">
@@ -45,7 +46,7 @@
         </Button>
 
         <Label Content="Bildinformationen" FontSize="20" HorizontalAlignment="Left" Grid.Row="4" Width="268" />
-        <Label Content="{Binding Path=ImageModel.ImagePath}" HorizontalAlignment="Right" Grid.Row="4" Width="442"/>
+        <Label Content="{Binding Path=ImageModel.ImagePath}" HorizontalAlignment="Right" Grid.Row="4" Width="485" Margin="0,10"/>
 
         <TextBox IsReadOnly="{Binding Path=ImageModel.ImageClosed}" Grid.Row="5" Margin="3,3,3,3" HorizontalAlignment="Right" Width="482" TextWrapping="Wrap" Text="{Binding Path=ImageModel.GpsLocation}"></TextBox>
         <Label Content="Koordinaten" HorizontalAlignment="Left" Grid.Row="5" Width="185"/>
