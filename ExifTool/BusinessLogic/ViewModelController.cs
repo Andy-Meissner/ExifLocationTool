@@ -5,15 +5,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ExifTool.ImageData;
+using ExifTool.Model;
+using ExifTool.UtilityClasses;
 
 namespace ExifTool.BusinessLogic
 {
-    public class Controller
+    public class ViewModelController
     {
         private readonly DirectoryControl _directoryController;
         private CustomImage _currentImage;
 
-        public Controller()
+        public ViewModelController()
         {
             _directoryController = new DirectoryControl();
         }
@@ -26,7 +29,7 @@ namespace ExifTool.BusinessLogic
 
         public string OpenDestinationFolder()
         {
-            return _directoryController.GetPath();
+            return _directoryController.GetPathFromFolderDialog();
         }
 
         public CustomImage GetNextImage()
@@ -43,7 +46,12 @@ namespace ExifTool.BusinessLogic
 
         private CustomImage GetImageWithData(CustomImage img)
         {
-            img?.ReadExifData();
+            if(img != null)
+            {
+                MethodInvoker simpleDelegate = new MethodInvoker(img.ReadExifData);
+                IAsyncResult tag = simpleDelegate.BeginInvoke(null,null);
+                simpleDelegate.EndInvoke(tag);
+            }
             _currentImage = img;
             return img;
         }
@@ -80,7 +88,6 @@ namespace ExifTool.BusinessLogic
             {
                 _currentImage.Photographer = textboxPhotographer;
             }
-
         }
 
         public string GetCountryForGps(string textboxGpsData)
@@ -95,11 +102,25 @@ namespace ExifTool.BusinessLogic
             return String.Empty;
         }
 
-        public void SaveImage(string destination)
+        public void SaveImage(string destination,string source)
         {
-            _currentImage.SetExifData();
-            _currentImage.SaveImage(destination);
+            if (_currentImage.SetExifData())
+            {
+                if (_currentImage.SaveImage(destination) && source != destination)
+                {
+                    _directoryController.DirectoryChanged(source);
+                }
+            }
         }
-        
+
+        public bool LastImgInDir()
+        {
+            return _directoryController.LastPicInDir();
+        }
+
+        public bool FirstImgInDir()
+        {
+            return _directoryController.FirstPicInDir();
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 
-namespace ExifTool
+namespace ExifTool.UtilityClasses
 {
     public class HttpRequest
     {

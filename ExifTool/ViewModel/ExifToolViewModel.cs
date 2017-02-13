@@ -1,19 +1,20 @@
-﻿using System;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
 using ExifTool.BusinessLogic;
 using ExifTool.Model;
+using ExifTool.UtilityClasses;
 
-namespace ExifTool
+namespace ExifTool.ViewModel
 {
     public class ExifToolViewModel
     {
-        private readonly Controller _controller;
+        private readonly ViewModelController _viewModelController;
         
         public ExifToolViewModel()
         {
             DirectoryModel = new DirectoryModel();
             ImageModel = new ImageModel();
-            _controller = new Controller();
+            _viewModelController = new ViewModelController();
             ImageModel.PropertyChanged += ImageModel_PropertyChanged;
         }
 
@@ -25,10 +26,10 @@ namespace ExifTool
 
         void OpenSourceFolderExecute()
         {
-            var directoryPath = _controller.OpenSourceFolder();
+            var directoryPath = _viewModelController.OpenSourceFolder();
             DirectoryModel.SourceDirectory = directoryPath;
 
-            var firstImage = _controller.GetNextImage();
+            var firstImage = _viewModelController.GetNextImage();
             ImageModel.SetData(firstImage);
             
             DirectoryModel.DestinationDirectory = directoryPath;
@@ -38,7 +39,7 @@ namespace ExifTool
 
         void OpenDestinationFolderExecute()
         {
-            var directoryPath = _controller.OpenDestinationFolder();
+            var directoryPath = _viewModelController.OpenDestinationFolder();
             DirectoryModel.DestinationDirectory = directoryPath;
         }
 
@@ -51,58 +52,66 @@ namespace ExifTool
 
         void GetPrevImageExecute()
         {
-            var prevImage = _controller.GetPreviousImage();
+            var prevImage = _viewModelController.GetPreviousImage();
             ImageModel.SetData(prevImage);
         }
 
         bool GetPrevImageExecuteable()
         {
-            return true;
+            return !_viewModelController.FirstImgInDir();
         }
 
         public ICommand GetNextImage => new RelayCommand(GetNextImageExecute, GetNextImageExecuteable);
 
         void GetNextImageExecute()
         {
-            var nextImage = _controller.GetNextImage();
+            var nextImage = _viewModelController.GetNextImage();
             ImageModel.SetData(nextImage);
         }
 
         bool GetNextImageExecuteable()
         {
-            return true;
+            return !_viewModelController.LastImgInDir();
         }
 
         public ICommand SaveImage => new RelayCommand(SaveImageExecute, SaveImageExecuteable);
 
         void SaveImageExecute()
         {
-            _controller.SaveImage(DirectoryModel.DestinationDirectory);
+            var destination = DirectoryModel.DestinationDirectory;
+            var source = DirectoryModel.SourceDirectory;
+            _viewModelController.SaveImage(destination, source);
             GetNextImageExecute();
         }
 
         bool SaveImageExecuteable()
         {
-            return true;
+            return !ImageModel.ImageClosed;
         }
 
-        public ICommand OpenGoogleMaps => new RelayCommand(_controller.OpenGoogleMapsExecute);
+        public ICommand OpenGoogleMaps => new RelayCommand(_viewModelController.OpenGoogleMapsExecute);
 
         public void ImageModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "GpsLocation")
             {
-                _controller.SetGpsData(ImageModel.GpsLocation);
-                ImageModel.CountryName = _controller.GetCountryForGps(ImageModel.GpsLocation);
+                _viewModelController.SetGpsData(ImageModel.GpsLocation);
+                MethodInvoker simpleDelegate = new MethodInvoker(LoadCountryNameFromGps);
+                simpleDelegate.BeginInvoke(null, null);
             }
             else if (e.PropertyName == "Photographer")
             {
-                _controller.SetPhotographer(ImageModel.Photographer);
+                _viewModelController.SetPhotographer(ImageModel.Photographer);
             }
             else if (e.PropertyName == "CountryName")
             {
-                _controller.SetCountryName(ImageModel.CountryName);
+                _viewModelController.SetCountryName(ImageModel.CountryName);
             }
+        }
+
+        private void LoadCountryNameFromGps()
+        {
+            ImageModel.CountryName = _viewModelController.GetCountryForGps(ImageModel.GpsLocation);
         }
     }
 }
